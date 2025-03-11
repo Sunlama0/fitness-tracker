@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mes Séances</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#F2F2F2] flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+
+        <!-- Contenu principal -->
+        <div class="flex-grow flex flex-col items-center p-6">
+            <h2 class="text-3xl font-bold text-[#E30613] mb-6">Mes Séances</h2>
+
+            <!-- Bouton Ajouter -->
+            <a href="/workouts/add"
+                class="mb-4 px-6 py-2 bg-[#E30613] text-white rounded-lg hover:bg-[#C20510] transition">
+                Créer une séance +
+            </a>
+
+            <!-- Liste des Séances -->
+            <div class="w-full max-w-3xl">
+                <% if (sessions.length> 0) { %>
+                    <div class="grid gap-4">
+                        <% sessions.forEach(session=> { %>
+                            <div class="bg-white p-6 rounded-lg shadow-md flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-xl font-bold text-[#4A4A4A]">
+                                        <%= session.title %>
+                                    </h3>
+                                    <p class="text-gray-600">Date : <%= session.date.toLocaleDateString() %>
+                                    </p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="/workouts/<%= session._id %>"
+                                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition">
+                                        Voir
+                                    </a>
+                                    <form action="/workouts/delete/<%= session._id %>" method="POST">
+                                        <button type="submit"
+                                            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 transition">
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <% } else { %>
+                        <p class="text-center text-gray-600">Aucune séance enregistrée.</p>
+                        <% } %>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

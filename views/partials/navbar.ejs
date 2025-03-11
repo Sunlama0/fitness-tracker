@@ -1,0 +1,20 @@
+<nav class="bg-white text-[#4A4A4A] p-4 shadow-md">
+	<div class="container mx-auto flex justify-between items-center">
+		<a href="/" class="text-lg font-bold text-[#E30613] hover:text-[#4A4A4A] transition duration-300">
+			Fitness Tracker
+		</a>
+		<div class="space-x-4">
+			<% if (user) { %>
+				<span class="font-semibold text-[#E30613]">Bonjour, <%= user.firstName %> !</span>
+				<a href="/dashboard" class="px-4 py-2 rounded hover:bg-[#F2F2F2] transition duration-300">Dashboard</a>
+				<a href="/auth/logout"
+					class="px-4 py-2 rounded bg-[#E30613] text-white hover:bg-[#C20510] transition duration-300">Déconnexion</a>
+				<% } else { %>
+					<a href="/auth/login"
+						class="px-4 py-2 rounded bg-[#E30613] text-white hover:bg-[#C20510] transition duration-300">Connexion</a>
+					<a href="/auth/register"
+						class="px-4 py-2 rounded border border-[#E30613] text-[#E30613] hover:bg-[#E30613] hover:text-white transition duration-300">Inscription</a>
+					<% } %>
+		</div>
+	</div>
+</nav>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Exercice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-[#F2F2F2] flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+
+        <div class="flex-grow flex items-center justify-center p-6">
+            <div class="w-full max-w-lg bg-white p-8 rounded-lg shadow-xl text-[#4A4A4A]">
+                <h2 class="text-3xl font-bold text-center text-[#E30613] mb-6">
+                    Ajouter un Exercice
+                </h2>
+
+                <form action="/workouts/<%= sessionId %>/exercises/add" method="POST">
+                    <label class="block font-semibold mt-4">Nom de l'exercice</label>
+                    <select name="name" id="exerciseSelect" class="w-full border p-3 rounded-lg bg-[#F2F2F2]">
+                        <option value="" disabled selected>Sélectionnez un exercice</option>
+
+                        <!-- 🔹 Activités Sédentaires -->
+                        <option value="Assis devant la TV" data-met="1">Assis devant la TV (1.0 MET)</option>
+                        <option value="Travail de bureau assis" data-met="1.3">Travail de bureau assis (1.3 MET)
+                        </option>
+                        <option value="Lecture en position assise" data-met="1">Lecture assise (1.0 MET)</option>
+                        <option value="Manger en position assise" data-met="1.5">Manger assis (1.5 MET)</option>
+
+                        <!-- 🔹 Activités Légères -->
+                        <option value="Marche lente" data-met="2">Marche lente (2.0 MET)</option>
+                        <option value="Yoga" data-met="2.3">Yoga (2.3 MET)</option>
+                        <option value="Pilates" data-met="2.8">Pilates (2.8 MET)</option>
+                        <option value="Promener le chien" data-met="3">Promener le chien (3.0 MET)</option>
+
+                        <!-- 🔹 Activités Modérées -->
+                        <option value="Marche normale (5 km/h)" data-met="3">Marche normale (3.0 MET)</option>
+                        <option value="Randonnée modérée" data-met="5.3">Randonnée modérée (5.3 MET)</option>
+                        <option value="Volley-ball" data-met="4">Volley-ball match (4.0 MET)</option>
+                        <option value="Ski alpin" data-met="4.3">Ski alpin (4.3 MET)</option>
+                        <option value="Tennis de table" data-met="4">Tennis de table (4.0 MET)</option>
+                        <option value="Vélo à assistance électrique" data-met="4">Vélo électrique (4.0 MET)</option>
+
+                        <!-- 🔹 Activités Intenses -->
+                        <option value="Jogging léger" data-met="7">Jogging léger (7.0 MET)</option>
+                        <option value="Football" data-met="7">Football match (7.0 MET)</option>
+                        <option value="Basket-ball" data-met="7.5">Basket-ball match (7.5 MET)</option>
+                        <option value="Roller en loisir" data-met="7.5">Roller loisir (7.5 MET)</option>
+                        <option value="VTT" data-met="8.5">VTT (8.5 MET)</option>
+                        <option value="Boxe" data-met="12.3">Boxe combat (12.3 MET)</option>
+                        <option value="Corde à sauter" data-met="12.3">Corde à sauter (12.3 MET)</option>
+
+                        <!-- 🔹 Activités Très Intenses -->
+                        <option value="Course (Sprint)" data-met="23">Course Sprint (+22 km/h) (23.0 MET)</option>
+                        <option value="Cyclisme (+32 km/h)" data-met="16.8">Cyclisme (+32 km/h) (16.8 MET)</option>
+                        <option value="HIIT / CrossFit" data-met="11">HIIT / CrossFit (11.0 MET)</option>
+                        <option value="Escalade" data-met="11">Escalade (11.0 MET)</option>
+                        <option value="Arts Martiaux" data-met="10.3">Arts Martiaux (10.3 MET)</option>
+
+                        <!-- 🔹 Autre -->
+                        <option value="Autre" data-met="">Autre (Saisir MET)</option>
+                    </select>
+
+                    <!-- Champ caché pour le MET sélectionné -->
+                    <input type="hidden" name="met" id="metInput">
+
+                    <!-- Champ Titre pour exercices personnalisés -->
+                    <label class="block font-semibold mt-4 hidden" id="customNameLabel">Nom de l'exercice</label>
+                    <input type="text" name="customName" id="customNameInput"
+                        class="w-full border p-3 rounded-lg bg-[#F2F2F2] hidden" placeholder="Ex: Parkour, Pogo Stick">
+
+
+                    <!-- Champ MET pour exercices personnalisés -->
+                    <label class="block font-semibold mt-4 hidden" id="customMetLabel">MET personnalisé</label>
+                    <input type="number" name="customMet" id="customMetInput"
+                        class="w-full border p-3 rounded-lg bg-[#F2F2F2] hidden" placeholder="Ex: 8.5">
+
+                    <label class="block font-semibold mt-4 mb-4">Durée (minutes)</label>
+                    <input type="number" name="duration" placeholder="Durée en minutes"
+                        class="w-full border p-3 rounded-lg bg-[#F2F2F2]" required />
+
+                    <button type="submit"
+                        class="w-full bg-[#E30613] hover:bg-[#C20510] text-white font-bold py-3 mt-4 rounded-lg transition">
+                        Ajouter l'exercice
+                    </button>
+                </form>
+
+                <p class="text-center text-[#4A4A4A] mt-4">
+                    <a href="/workouts" class="text-[#E30613] hover:underline">Retour</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <%- include('../partials/footer') %>
+
+            <script>
+                function logFormData(event) {
+
+                    let selectedExercise = document.getElementById("exerciseSelect");
+                    let selectedOption = selectedExercise.options[selectedExercise.selectedIndex];
+                    let metValue = selectedOption.dataset.met || document.getElementById("customMetInput").value;
+                    let durationValue = document.getElementById("durationInput").value;
+
+                    // Mettre à jour le champ caché du MET
+                    document.getElementById("metInput").value = metValue;
+
+                    // Ensuite, soumettre le formulaire
+                    event.target.submit();
+                }
+
+                document.getElementById("exerciseSelect").addEventListener("change", function () {
+                    let selectedOption = this.options[this.selectedIndex];
+                    let metValue = selectedOption.dataset.met;
+                    let customMetInput = document.getElementById("customMetInput");
+                    let customMetLabel = document.getElementById("customMetLabel");
+                    let metInput = document.getElementById("metInput");
+
+                    let customNameInput = document.getElementById("customNameInput");
+                    let customNameLabel = document.getElementById("customNameLabel");
+
+                    if (selectedOption.value === "Autre") {
+                        customMetInput.classList.remove("hidden");
+                        customMetLabel.classList.remove("hidden");
+                        customMetInput.required = true;
+
+                        customNameInput.classList.remove("hidden");
+                        customNameLabel.classList.remove("hidden");
+                        customNameInput.required = true;
+
+                        metInput.value = ''; // Effacer MET pour éviter une erreur
+                    } else {
+                        customMetInput.classList.add("hidden");
+                        customMetLabel.classList.add("hidden");
+                        customMetInput.required = false;
+
+                        customNameInput.classList.add("hidden");
+                        customNameLabel.classList.add("hidden");
+                        customNameInput.required = false;
+
+                        metInput.value = metValue; // Mettre à jour le champ MET caché
+                    }
+                });
+            </script>
+
+</body>
+
+</html>
