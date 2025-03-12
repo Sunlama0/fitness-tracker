@@ -1,48 +1,41 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Tableau de Bord</title>
-		<script src="https://cdn.tailwindcss.com"></script>
-	</head>
-	<body class="bg-[#F2F2F2] flex flex-col min-h-screen">
-		<!-- Navbar -->
-		<%- include('partials/navbar') %>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tableau de Bord</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#F2F2F2] flex flex-col min-h-screen">
+
+	<!-- Navbar -->
+	<%- include('partials/navbar') %>
 
 		<!-- Contenu principal -->
 		<div class="flex-grow container mx-auto py-12 px-6">
-			<h1 class="text-4xl font-bold text-[#E30613] mb-6">
-				Tableau de Bord
-			</h1>
+			<h1 class="text-4xl font-bold text-[#E30613] mb-6">🏆 Tableau de Bord</h1>
 
 			<!-- Statistiques principales -->
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 				<div class="bg-white p-6 rounded-lg shadow-lg text-center">
-					<h2 class="text-xl font-semibold text-[#4A4A4A]">
-						Entraînements
-					</h2>
+					<h2 class="text-xl font-semibold text-[#4A4A4A]">📅 Entraînements</h2>
 					<p class="text-3xl font-bold text-[#E30613]">12</p>
 				</div>
 				<div class="bg-white p-6 rounded-lg shadow-lg text-center">
-					<h2 class="text-xl font-semibold text-[#4A4A4A]">
-						Calories brûlées
-					</h2>
+					<h2 class="text-xl font-semibold text-[#4A4A4A]">🔥 Calories brûlées</h2>
 					<p class="text-3xl font-bold text-[#E30613]">3 500 kcal</p>
 				</div>
 				<div class="bg-white p-6 rounded-lg shadow-lg text-center">
-					<h2 class="text-xl font-semibold text-[#4A4A4A]">
-						Poids actuel
-					</h2>
+					<h2 class="text-xl font-semibold text-[#4A4A4A]">⚖️ Poids actuel</h2>
 					<p class="text-3xl font-bold text-[#E30613]">78 kg</p>
 				</div>
 			</div>
 
 			<!-- Entraînements récents -->
 			<div class="mt-10">
-				<h2 class="text-2xl font-semibold text-[#4A4A4A] mb-4">
-					Mes derniers entraînements
-				</h2>
+				<h2 class="text-2xl font-semibold text-[#4A4A4A] mb-4">📅 Mes derniers entraînements</h2>
 				<div class="bg-white p-6 rounded-lg shadow-lg">
 					<table class="w-full text-left">
 						<thead>
@@ -66,6 +59,12 @@
 								<td class="py-2">1h</td>
 								<td class="py-2">500 kcal</td>
 							</tr>
+							<tr class="border-b">
+								<td class="py-2">5 Mars 2025</td>
+								<td class="py-2">HIIT</td>
+								<td class="py-2">30 min</td>
+								<td class="py-2">600 kcal</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -74,5 +73,7 @@
 
 		<!-- Footer -->
 		<%- include('partials/footer') %>
-	</body>
+
+</body>
+
 </html>

@@ -63,6 +63,12 @@
                             <%= session.motivation %> ⭐
                         </p>
                     </div>
+                    <div>
+                        <p class="text-lg font-semibold text-gray-700">Total Calories Brûlées :</p>
+                        <p class="text-[#E30613] font-bold">
+                            <%= session.totalCaloriesBurned.toFixed(2) %> cal
+                        </p>
+                    </div>
                     <!-- Statut de la séance -->
                     <div>
                         <p class="text-lg font-semibold text-gray-700">Statut :</p>
@@ -114,7 +120,7 @@
                                                 exercise.caloriesBurned.toFixed(2) %> cal</p>
                                         <div class="w-full bg-gray-200 h-2 rounded-full mt-1">
                                             <div class="bg-[#E30613] h-2 rounded-full"
-                                                style="width: <%= Math.min((exercise.caloriesBurned / 2000) * 100, 100) %>%;">
+                                                style="width: <%= Math.min((exercise.caloriesBurned / 2000) * 100, 100) %>%">
                                             </div>
                                         </div>
                                     </div>

@@ -173,6 +173,24 @@ exports.updateSession = async (req, res) => {
     }
 };
 
+async function updateCaloriesBurned(sessionId) {
+    try {
+        const session = await WorkoutSession.findById(sessionId).populate('exercises');
+
+        if (!session) return;
+
+        // Calcul de la somme des calories brûlées
+        const totalCalories = session.exercises.reduce((total, exercise) => total + exercise.caloriesBurned, 0);
+
+        // Mise à jour dans la BDD
+        session.totalCaloriesBurned = totalCalories;
+        await session.save();
+        console.log(`🔥 [INFO] Total calories updated for session ${sessionId}: ${totalCalories} kcal`);
+    } catch (error) {
+        console.error("❌ [ERROR] Erreur lors de la mise à jour des calories brûlées :", error);
+    }
+}
+
 // 📌 Afficher la page pour modifier une séance
 exports.showEditSessionPage = async (req, res) => {
     try {
@@ -269,7 +287,7 @@ exports.addExercise = async (req, res) => {
             return res.redirect(`/workouts/${sessionId}/exercises/add`);
         }
 
-        const userWeight = req.user.weight || 70;
+        const userWeight = req.user.weight || 70; // Poids par défaut 70 kg si non renseigné
         const caloriesBurned = ((metValue * 3.5 * userWeight) / 200) * parseInt(duration, 10);
         const finalName = name === "Autre" ? customName : name;
 
@@ -285,6 +303,9 @@ exports.addExercise = async (req, res) => {
         await newExercise.save();
         session.exercises.push(newExercise._id);
         await session.save();
+
+        // 🔥 Mettre à jour les calories brûlées pour la séance
+        await updateCaloriesBurned(session._id);
 
         req.flash('success', '✅ Exercice ajouté avec succès.');
         res.redirect(`/workouts/${sessionId}`);
@@ -306,10 +327,15 @@ exports.editExercise = async (req, res) => {
             return res.redirect('/workouts');
         }
 
+        // Recalculer les calories brûlées
         exercise.duration = parseInt(duration, 10);
         exercise.caloriesBurned = (exercise.met * 3.5 * req.user.weight) / 200 * exercise.duration;
 
         await exercise.save();
+
+        // 🔥 Mettre à jour les calories brûlées pour la séance
+        await updateCaloriesBurned(exercise.workoutSession);
+
         req.flash('success', "✅ Exercice mis à jour !");
         res.redirect(`/workouts/${exercise.workoutSession}`);
     } catch (error) {

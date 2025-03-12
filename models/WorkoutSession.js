@@ -14,6 +14,7 @@ const workoutSessionSchema = new mongoose.Schema({
         enum: ['À venir', 'En cours', 'Terminé'], 
         default: 'À venir' 
     },
+    totalCaloriesBurned: { type: Number, default: 0 },
     exercises: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Exercise' }],
     dateCreated: { type: Date, default: Date.now }
 });
