@@ -10,6 +10,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
     "@tailwindcss/vite": "^4.0.12",
     "bcryptjs": "^3.0.2",
     "connect-flash": "^0.1.1",
@@ -17,6 +21,7 @@
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
+    "fullcalendar": "^6.1.15",
     "helmet": "^6.1.2",
     "method-override": "^3.0.0",
     "mongoose": "^8.12.1",
