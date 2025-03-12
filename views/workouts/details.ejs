@@ -8,65 +8,127 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-100 flex flex-col min-h-screen font-sans">
 
     <!-- Navbar -->
     <%- include('../partials/navbar') %>
 
-        <!-- Contenu principal -->
-        <div class="container mx-auto p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-3xl font-bold text-[#E30613]">📅 Détails de la Séance</h2>
-                <a href="/workouts/<%= session._id %>/exercises/add"
-                    class="bg-[#E30613] hover:bg-[#C20510] text-white font-bold py-3 px-6 rounded-lg transition">
-                    ➕ Ajouter un exercice
-                </a>
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex justify-between items-center">
+                <h1 class="text-4xl font-extrabold text-gray-900">Détails de la Séance</h1>
+                <div class="flex gap-3">
+                    <a href="/workouts/<%= session._id %>/edit"
+                        class="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition font-semibold">
+                        ✏ Modifier la séance
+                    </a>
+                    <a href="/workouts/<%= session._id %>/exercises/add"
+                        class="px-6 py-2 bg-[#E30613] text-white rounded-lg hover:bg-[#C20510] transition font-semibold">
+                        ➕ Ajouter un exercice
+                    </a>
+                </div>
             </div>
 
             <!-- Informations générales -->
-            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-                <p class="text-lg font-semibold">📌 Type d'entraînement : <span class="text-[#E30613]">
-                        <%= session.type %>
-                    </span></p>
-                <p class="text-lg font-semibold">📅 Date : <span class="text-gray-700">
-                        <%= session.date.toLocaleDateString() %>
-                    </span></p>
+            <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <p class="text-lg font-semibold text-gray-700">Type d'entraînement :</p>
+                        <p class="text-[#E30613] font-bold text-xl">
+                            <%= session.type %>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-semibold text-gray-700">Date & Heure :</p>
+                        <p class="text-gray-800 font-medium">
+                            <%= new Date(session.date).toLocaleDateString() %> -
+                                <%= new Date(session.date).toLocaleTimeString([], { hour: '2-digit' , minute: '2-digit'
+                                    }) %>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-semibold text-gray-700">Météo :</p>
+                        <p class="text-gray-800 font-medium">
+                            <%= session.weather %> | <%= session.temperature %>°C
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-semibold text-gray-700">Revêtement :</p>
+                        <p class="text-gray-800 font-medium">
+                            <%= session.surface %>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-semibold text-gray-700">Motivation :</p>
+                        <p class="text-gray-800 font-medium">
+                            <%= session.motivation %> ⭐
+                        </p>
+                    </div>
+                    <!-- Statut de la séance -->
+                    <div>
+                        <p class="text-lg font-semibold text-gray-700">Statut :</p>
+                        <form action="/workouts/<%= session._id %>/status" method="POST" class="flex gap-2">
+                            <button type="submit" name="status" value="À venir"
+                                class="px-4 py-2 rounded-md font-semibold transition
+                                    <%= session.status === 'À venir' ? 'bg-yellow-500 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400' %>">
+                                À venir
+                            </button>
+                            <button type="submit" name="status" value="En cours"
+                                class="px-4 py-2 rounded-md font-semibold transition
+                                    <%= session.status === 'En cours' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400' %>">
+                                En cours
+                            </button>
+                            <button type="submit" name="status" value="Terminé"
+                                class="px-4 py-2 rounded-md font-semibold transition
+                                    <%= session.status === 'Terminé' ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400' %>">
+                                Terminé
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <!-- Liste des exercices -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-2xl font-semibold mb-4">🏋️‍♂️ Exercices</h3>
-
+            <div class="mt-8 bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Exercices</h2>
                 <% if (session.exercises.length===0) { %>
                     <p class="text-gray-500 text-center">Aucun exercice ajouté pour cette séance.</p>
                     <% } else { %>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <% session.exercises.forEach(exercise=> { %>
                                 <div
-                                    class="p-4 bg-gray-50 rounded-lg shadow flex flex-col justify-between transition hover:shadow-lg">
-                                    <div>
-                                        <p class="text-lg font-bold text-gray-800">
+                                    class="p-5 bg-gray-50 rounded-lg shadow-lg transform transition hover:-translate-y-1 hover:shadow-xl">
+                                    <div class="flex justify-between items-center">
+                                        <p class="text-xl font-semibold text-gray-800">
                                             <%= exercise.name %>
                                         </p>
-                                        <p class="text-sm text-gray-500">🔥 MET: <%= exercise.met %> | ⏳ Durée: <%=
-                                                    exercise.duration %> min</p>
-                                        <p class="text-sm text-gray-500 font-bold">💪 Calories brûlées : <span
-                                                class="text-[#E30613]">
-                                                <%= exercise.caloriesBurned.toFixed(2) %> kcal
-                                            </span></p>
+                                        <span class="text-gray-600 text-sm">
+                                            <%= exercise.duration %> min
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-1">MET: <%= exercise.met %>
+                                    </p>
+
+                                    <!-- Barre de progression pour les calories brûlées -->
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-600 font-medium">Calories brûlées : <%=
+                                                exercise.caloriesBurned.toFixed(2) %> cal</p>
+                                        <div class="w-full bg-gray-200 h-2 rounded-full mt-1">
+                                            <div class="bg-[#E30613] h-2 rounded-full"
+                                                style="width: <%= Math.min((exercise.caloriesBurned / 2000) * 100, 100) %>%;">
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <!-- Boutons d'action -->
                                     <div class="flex justify-between mt-4">
                                         <button
                                             onclick="openEditModal('<%= exercise._id %>', '<%= exercise.name %>', '<%= exercise.duration %>')"
-                                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md text-sm transition">
-                                            ✏ Modifier
+                                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm transition">
+                                            Modifier
                                         </button>
-
                                         <button onclick="confirmDelete('<%= exercise._id %>')"
-                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-md text-sm transition">
-                                            ❌ Supprimer
+                                            class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm transition">
+                                            Supprimer
                                         </button>
                                     </div>
                                 </div>
@@ -76,11 +138,11 @@
             </div>
         </div>
 
-        <!-- Modal d'édition -->
+        <!-- MODAL D'ÉDITION D'EXERCICE -->
         <div id="editExerciseModal"
             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
-                <h3 class="text-2xl font-semibold mb-4 text-[#E30613]">⏳ Modifier la durée</h3>
+            <div class="bg-white p-6 rounded-lg shadow-lg w-96 transform scale-95 transition-transform duration-300">
+                <h3 class="text-2xl font-semibold mb-4 text-[#E30613] text-center">Modifier l'exercice</h3>
                 <form id="editForm" method="POST">
                     <input type="hidden" name="exerciseId" id="editExerciseId">
 
@@ -90,16 +152,18 @@
 
                     <label class="block font-semibold mt-4 text-gray-700">Durée (minutes)</label>
                     <input type="number" name="duration" id="editExerciseDuration"
-                        class="w-full border p-3 rounded-lg bg-gray-50" required>
+                        class="w-full border p-3 rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#E30613]" required
+                        min="1">
 
-                    <div class="flex justify-end mt-4">
+                    <!-- BOUTONS D'ACTION -->
+                    <div class="flex justify-end mt-4 space-x-3">
                         <button type="button" onclick="closeEditModal()"
-                            class="mr-2 px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition">
+                            class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition">
                             Annuler
                         </button>
                         <button type="submit"
                             class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition">
-                            ✅ Enregistrer
+                            Enregistrer
                         </button>
                     </div>
                 </form>
@@ -109,28 +173,36 @@
         <!-- Footer -->
         <%- include('../partials/footer') %>
 
-            <!-- Script pour gérer l'édition et suppression -->
-            <script>
-                function openEditModal(id, name, duration) {
-                    document.getElementById("editExerciseId").value = id;
-                    document.getElementById("editExerciseName").innerText = name;
-                    document.getElementById("editExerciseDuration").value = duration;
 
-                    document.getElementById("editForm").action = `/workouts/<%= session._id %>/exercises/${id}/edit`;
-
-                    document.getElementById("editExerciseModal").classList.remove("hidden");
-                }
-
-                function closeEditModal() {
-                    document.getElementById("editExerciseModal").classList.add("hidden");
-                }
-
-                function confirmDelete(exerciseId) {
-                    if (confirm("Voulez-vous vraiment supprimer cet exercice ?")) {
-                        window.location.href = `/workouts/<%= session._id %>/exercises/${exerciseId}/delete`;
-                    }
-                }
-            </script>
 </body>
+
+<script>
+    function openEditModal(id, name, duration) {
+        // Affecte les valeurs au formulaire
+        document.getElementById("editExerciseId").value = id;
+        document.getElementById("editExerciseName").innerText = name;
+        document.getElementById("editExerciseDuration").value = duration;
+
+        // Met à jour l'URL du formulaire
+        document.getElementById("editForm").action = `/workouts/<%= session._id %>/exercises/${id}/edit`;
+
+        // Affiche le modal avec un effet d'animation
+        let modal = document.getElementById("editExerciseModal");
+        modal.classList.remove("hidden");
+        setTimeout(() => modal.classList.add("scale-100"), 50); // Animation d'apparition
+    }
+
+    function closeEditModal() {
+        let modal = document.getElementById("editExerciseModal");
+        modal.classList.remove("scale-100");
+        setTimeout(() => modal.classList.add("hidden"), 300); // Animation de disparition
+    }
+
+    function confirmDelete(exerciseId) {
+        if (confirm("Voulez-vous vraiment supprimer cet exercice ?")) {
+            window.location.href = `/workouts/<%= session._id %>/exercises/${exerciseId}/delete`;
+        }
+    }
+</script>
 
 </html>

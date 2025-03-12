@@ -2,8 +2,8 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Créer une Séance</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -13,26 +13,39 @@
     <!-- Navbar -->
     <%- include('../partials/navbar') %>
 
+        <!-- Contenu principal -->
         <div class="flex-grow flex items-center justify-center p-6">
-            <div class="w-full max-w-lg bg-white p-8 rounded-lg shadow-xl text-[#4A4A4A]">
-                <h2 class="text-3xl font-bold text-center text-[#E30613] mb-6">
-                    Créer une Séance
-                </h2>
+            <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-xl text-[#4A4A4A]">
+                <h2 class="text-3xl font-bold text-center text-[#E30613] mb-6">Créer une Séance</h2>
 
                 <form action="/workouts/add" method="POST" class="space-y-4">
-                    <label class="block font-semibold">Nom de la Séance</label>
-                    <input type="text" name="title" placeholder="Ex: Séance Full Body"
+                    <label class="block font-semibold">Nom de la séance</label>
+                    <input type="text" name="title" placeholder="Ex: Séance du matin"
                         class="w-full border p-3 rounded-lg bg-[#F2F2F2]" required />
+
+                    <label class="block font-semibold">Type de séance</label>
+                    <select name="type" class="w-full border p-3 rounded-lg bg-[#F2F2F2]" required>
+                        <option value="" disabled selected>Sélectionnez un type</option>
+                        <option value="Musculation">Musculation</option>
+                        <option value="Full Body">Full Body</option>
+                        <option value="Half Body">Half Body</option>
+                        <option value="Street Workout">Street Workout</option>
+                        <option value="HIIT">HIIT</option>
+                        <option value="Cardio">Cardio</option>
+                        <option value="Mobilité et Stretching">Mobilité et Stretching</option>
+                        <option value="Entraînement Fonctionnel (CrossFit, TRX)">Entraînement Fonctionnel (CrossFit,
+                            TRX)</option>
+                    </select>
+
+                    <label class="block font-semibold">Date et Heure</label>
+                    <input type="datetime-local" name="date" class="w-full border p-3 rounded-lg bg-[#F2F2F2]"
+                        required />
 
                     <button type="submit"
                         class="w-full bg-[#E30613] hover:bg-[#C20510] text-white font-bold py-3 rounded-lg transition">
-                        Créer la Séance
+                        Ajouter la séance
                     </button>
                 </form>
-
-                <p class="text-center text-[#4A4A4A] mt-4">
-                    <a href="/workouts" class="text-[#E30613] hover:underline">Retour</a>
-                </p>
             </div>
         </div>
 

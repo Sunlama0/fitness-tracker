@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const passport = require('passport');
 const methodOverride = require('method-override');
 const path = require('path');
+const morgan = require('morgan');
 
 // Configuration des variables d'environnement
 dotenv.config();
@@ -15,6 +16,7 @@ dotenv.config();
 const app = express();
 
 app.use(express.static('public'));
+app.use(morgan('dev'));
 
 // Connexion à MongoDB Atlas
 mongoose

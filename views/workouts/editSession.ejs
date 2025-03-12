@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modifier la Séance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+
+        <!-- Contenu principal -->
+        <div class="flex-grow flex flex-col items-center p-6">
+            <div class="w-full max-w-lg bg-white p-8 rounded-lg shadow-xl text-gray-800 border border-gray-200">
+                <h2 class="text-3xl font-bold text-center text-[#E30613] mb-6">Modifier la Séance</h2>
+
+                <!-- Formulaire de modification -->
+                <form action="/workouts/<%= session._id %>/edit" method="POST" class="space-y-6">
+
+                    <!-- Motivation -->
+                    <div>
+                        <label class="block font-semibold text-lg mb-2">Motivation</label>
+                        <div class="flex space-x-1 justify-center mt-2">
+                            <% for (let i=1; i <=10; i++) { %>
+                                <span class="star cursor-pointer text-gray-300 text-3xl transition"
+                                    data-value="<%= i %>">
+                                    ★
+                                </span>
+                                <% } %>
+                        </div>
+                        <input type="hidden" name="motivation" id="motivationInput"
+                            value="<%= session.motivation || '' %>">
+                    </div>
+
+                    <!-- Météo -->
+                    <div>
+                        <label class="block font-semibold text-lg">Météo</label>
+                        <select name="weather"
+                            class="w-full border p-3 rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#E30613]">
+                            <option value="" disabled> Sélectionnez la météo</option>
+                            <option value="Ensoleillé" <%=session.weather==='Ensoleillé' ? 'selected' : '' %>>☀️
+                                Ensoleillé</option>
+                            <option value="Nuageux" <%=session.weather==='Nuageux' ? 'selected' : '' %>>🌥️ Nuageux
+                            </option>
+                            <option value="Pluie" <%=session.weather==='Pluie' ? 'selected' : '' %>>🌧️ Pluie</option>
+                            <option value="Neige" <%=session.weather==='Neige' ? 'selected' : '' %>>❄️ Neige</option>
+                            <option value="Nuit" <%=session.weather==='Nuit' ? 'selected' : '' %>>🌙 Nuit</option>
+                        </select>
+                    </div>
+
+                    <!-- Température -->
+                    <div>
+                        <label class="block font-semibold text-lg">Température (°C)</label>
+                        <input type="number" name="temperature" value="<%= session.temperature || '' %>"
+                            class="w-full border p-3 rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#E30613]" />
+                    </div>
+
+                    <!-- Revêtement -->
+                    <div>
+                        <label class="block font-semibold text-lg">Revêtement</label>
+                        <select name="surface"
+                            class="w-full border p-3 rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#E30613]">
+                            <option value="" disabled> Sélectionnez le revêtement</option>
+                            <option value="Ville" <%=session.surface==='Ville' ? 'selected' : '' %>>🏙️ Ville</option>
+                            <option value="Parcours" <%=session.surface==='Parcours' ? 'selected' : '' %>>🌲 Parcours
+                            </option>
+                            <option value="Mixte" <%=session.surface==='Mixte' ? 'selected' : '' %>>🔄 Mixte</option>
+                            <option value="Sable" <%=session.surface==='Sable' ? 'selected' : '' %>>🏖️ Sable</option>
+                            <option value="Salle de sport" <%=session.surface==='Salle de sport' ? 'selected' : '' %>
+                                >🏋️ Salle de sport</option>
+                            <option value="Extérieur" <%=session.surface==='Extérieur' ? 'selected' : '' %>>🌿 Extérieur
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Boutons -->
+                    <div class="flex justify-between mt-6">
+                        <a href="/workouts/<%= session._id %>"
+                            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">
+                            Retour
+                        </a>
+                        <button type="submit"
+                            class="px-6 py-3 bg-[#E30613] hover:bg-[#C20510] text-white font-bold rounded-lg transition">
+                            Mettre à jour la séance
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <%- include('../partials/footer') %>
+
+            <!-- Script pour les étoiles -->
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const stars = document.querySelectorAll(".star");
+                    const motivationInput = document.getElementById("motivationInput");
+
+                    function setStars(value) {
+                        stars.forEach(star => {
+                            if (parseInt(star.dataset.value) <= value) {
+                                star.classList.add("text-yellow-500");
+                            } else {
+                                star.classList.remove("text-yellow-500");
+                            }
+                        });
+                    }
+
+                    stars.forEach(star => {
+                        star.addEventListener("click", function () {
+                            let value = parseInt(this.dataset.value);
+                            motivationInput.value = value;
+                            setStars(value);
+                        });
+
+                        star.addEventListener("mouseover", function () {
+                            let value = parseInt(this.dataset.value);
+                            setStars(value);
+                        });
+
+                        star.addEventListener("mouseout", function () {
+                            setStars(parseInt(motivationInput.value) || 0);
+                        });
+                    });
+
+                    // Afficher la valeur actuelle au chargement de la page
+                    setStars(parseInt(motivationInput.value) || 0);
+                });
+            </script>
+
+</body>
+
+</html>
