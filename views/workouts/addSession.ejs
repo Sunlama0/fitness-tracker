@@ -52,6 +52,25 @@
         <!-- Footer -->
         <%- include('../partials/footer') %>
 
+            <!-- Script pour pré-remplir la date et l'heure -->
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Récupération des paramètres de l'URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const selectedDate = urlParams.get('date'); // YYYY-MM-DD
+                    const selectedTime = urlParams.get('time'); // HH:MM
+
+                    // Sélectionne le champ DateTime Local
+                    const dateTimeInput = document.querySelector("input[name='date']");
+
+                    if (selectedDate && selectedTime) {
+                        // Combine date et heure pour l'affichage correct dans datetime-local
+                        const formattedDateTime = `${selectedDate}T${selectedTime}`;
+                        dateTimeInput.value = formattedDateTime;
+                    }
+                });
+            </script>
+
 </body>
 
 </html>

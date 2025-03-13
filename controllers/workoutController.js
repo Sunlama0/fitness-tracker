@@ -349,21 +349,27 @@ exports.deleteExercise = async (req, res) => {
     try {
         const { exerciseId } = req.params;
 
-        const exercise = await Exercise.findOneAndDelete({ _id: exerciseId, user: req.user._id });
-
+        // Trouver l'exercice à supprimer
+        const exercise = await Exercise.findOne({ _id: exerciseId, user: req.user._id });
         if (!exercise) {
-            req.flash('error', "Exercice introuvable.");
+            req.flash('error', "❌ Exercice introuvable.");
             return res.redirect('/workouts');
         }
 
-        await WorkoutSession.findByIdAndUpdate(exercise.workoutSession, {
-            $pull: { exercises: exerciseId }
-        });
+        // Récupérer l'ID de la séance associée avant suppression
+        const workoutSessionId = exercise.workoutSession;
+
+        // Supprimer l'exercice
+        await Exercise.deleteOne({ _id: exerciseId });
+
+        // 🔥 Recalculer les calories pour la séance après suppression
+        await updateCaloriesBurned(workoutSessionId);
 
         req.flash('success', "✅ Exercice supprimé !");
-        res.redirect(`/workouts/${exercise.workoutSession}`);
+        res.redirect(`/workouts/${workoutSessionId}`);
     } catch (error) {
         console.error("❌ [ERROR] Erreur lors de la suppression :", error);
+        req.flash('error', "Une erreur est survenue lors de la suppression.");
         res.redirect('/workouts');
     }
 };

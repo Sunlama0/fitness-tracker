@@ -31,6 +31,6 @@ router.post('/:sessionId/exercises/add', ensureAuthenticated, workoutController.
 router.post('/:sessionId/exercises/:exerciseId/edit', ensureAuthenticated, workoutController.editExercise);
 
 // 📌 Supprimer un exercice
-router.post('/:sessionId/exercises/:exerciseId/delete', ensureAuthenticated, workoutController.deleteExercise);
+router.get("/:sessionId/exercises/:exerciseId/delete", ensureAuthenticated, workoutController.deleteExercise);
 
 module.exports = router;

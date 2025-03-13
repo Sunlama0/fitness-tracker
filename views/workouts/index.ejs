@@ -6,60 +6,176 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mes Séances</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ✅ Survol des jours pour meilleure lisibilité */
+        .fc-daygrid-day:hover {
+            background-color: #FFDDCC !important;
+            cursor: pointer;
+            transition: background 0.2s ease-in-out;
+        }
+
+        .fc-daygrid-event {
+            display: inline-flex !important;
+            align-items: flex-start !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            max-width: 100% !important;
+            min-height: 2rem !important;
+            padding: 4px 6px !important;
+        }
+
+
+        .fc-event {
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 4px 6px !important;
+            border-radius: 6px !important;
+            font-size: 12px !important;
+            width: calc(100% - 6px) !important;
+            max-width: 100% !important;
+            background-color: rgba(217, 50, 50, 0.1) !important;
+            color: #D93232 !important;
+            border-left: 4px solid #D93232 !important;
+            transition: background 0.2s ease-in-out;
+        }
+
+        /* Effet hover */
+        .fc-event:hover {
+            background-color: rgba(217, 50, 50, 0.2) !important;
+        }
+
+        /* Titre de la séance */
+        .fc-event-title {
+            font-weight: bold;
+            font-size: 0.9rem !important;
+        }
+
+        /* Type de séance en dessous */
+        .fc-event-type {
+            font-size: 0.8rem !important;
+            opacity: 0.8;
+        }
+
+        /* Heure à droite */
+        .fc-event-time {
+            font-size: 0.8rem !important;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        /* ✅ Design du header */
+        .fc .fc-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #D93232;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        /* ✅ Style des numéros de jour */
+        .fc-daygrid-day-number {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2B2D42;
+        }
+    </style>
 </head>
 
-<body class="bg-[#F2F2F2] flex flex-col min-h-screen">
-
+<body class="bg-[#F8F9FA] flex flex-col min-h-screen">
     <!-- Navbar -->
     <%- include('../partials/navbar') %>
 
-        <!-- Contenu principal -->
         <div class="flex-grow flex flex-col items-center p-6">
-            <h2 class="text-3xl font-bold text-[#E30613] mb-6">Mes Séances</h2>
+            <div class="w-full max-w-7xl mx-auto p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-[#14213D]">Mon Planning</h2>
+                    <a href="/workouts/add"
+                        class="px-6 py-3 bg-[#D93232] text-white font-semibold rounded-lg shadow-md hover:opacity-80 transition">
+                        ➕ Nouvelle Séance
+                    </a>
+                </div>
 
-            <!-- Bouton Ajouter -->
-            <a href="/workouts/add"
-                class="mb-4 px-6 py-2 bg-[#E30613] text-white rounded-lg hover:bg-[#C20510] transition">
-                Créer une séance +
-            </a>
-
-            <!-- Liste des Séances -->
-            <div class="w-full max-w-3xl">
-                <% if (sessions.length> 0) { %>
-                    <div class="grid gap-4">
-                        <% sessions.forEach(session=> { %>
-                            <div class="bg-white p-6 rounded-lg shadow-md flex justify-between items-center">
-                                <div>
-                                    <h3 class="text-xl font-bold text-[#4A4A4A]">
-                                        <%= session.title %>
-                                    </h3>
-                                    <p class="text-gray-600">Date : <%= session.date.toLocaleDateString() %>
-                                    </p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="/workouts/<%= session._id %>"
-                                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition">
-                                        Voir
-                                    </a>
-                                    <form action="/workouts/delete/<%= session._id %>" method="POST">
-                                        <button type="submit"
-                                            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 transition">
-                                            Supprimer
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                            <% }) %>
-                    </div>
-                    <% } else { %>
-                        <p class="text-center text-gray-600">Aucune séance enregistrée.</p>
-                        <% } %>
+                <div class="w-full bg-white shadow-lg rounded-lg p-6">
+                    <div id='calendar'></div>
+                </div>
             </div>
         </div>
 
-        <!-- Footer -->
         <%- include('../partials/footer') %>
 
+            <script type="application/json" id="sessions-data">
+        <%- JSON.stringify(sessions) %>
+    </script>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    if (typeof FullCalendar === "undefined") {
+                        console.error("FullCalendar.js n'est pas chargé !");
+                        return;
+                    }
+
+                    let calendarEl = document.getElementById('calendar');
+
+                    // S'assurer que l'élément FullCalendar est bien défini une seule fois
+                    if (calendarEl.innerHTML.trim() !== "") {
+                        console.warn("FullCalendar semble déjà chargé. Ignoré.");
+                        return;
+                    }
+
+                    let sessionsData = document.getElementById('sessions-data').textContent;
+                    let sessions = sessionsData ? JSON.parse(sessionsData) : [];
+
+                    let calendar = new FullCalendar.Calendar(calendarEl, {
+                        initialView: 'dayGridMonth', // Vue uniquement mois
+                        locale: 'fr',
+                        firstDay: 1, // Lundi en premier
+                        headerToolbar: {
+                            left: 'prev,next',
+                            center: 'title',
+                            right: ''
+                        },
+                        events: sessions.map(session => ({
+                            id: session._id,
+                            title: session.title,
+                            start: session.date,
+                            extendedProps: { type: session.type },
+                            color: '#D93232'
+                        })),
+                        eventClick: function (info) {
+                            window.location.href = `/workouts/${info.event.id}`;
+                        },
+                        dateClick: function (info) {
+                            let selectedDate = info.dateStr;
+                            window.location.href = `/workouts/add?date=${selectedDate}&time=12:00`;
+                        },
+                        eventContent: function (arg) {
+                            return {
+                                html: `
+                                    <div class="flex flex-col w-full">
+                                        <div class="flex justify-between">
+                                            <span class="fc-event-title">${arg.event.title}</span>
+                                            <span class="fc-event-time">${new Date(arg.event.start).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
+                                        </div>
+                                        <span class="fc-event-type">${arg.event.extendedProps.type}</span>
+                                    </div>
+                                `
+                            };
+                        }
+                    });
+                    calendar.render();
+                });
+            </script>
 </body>
 
 </html>
